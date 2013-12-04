@@ -1,4 +1,4 @@
-kalos
+καλός
 =====
 
 Notes for configurations.
