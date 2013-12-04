@@ -1,0 +1,4 @@
+kalos
+=====
+
+Notes for configurations.
