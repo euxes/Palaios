@@ -69,7 +69,7 @@ Before configuring `shrpx`, there are some SSL certs that should be prepared, in
 
 This part is almost the same as Part II of [Setting up a Stunnel-secured Proxy Server](https://github.com/vvord/kalos/blob/master/setting_up_stunnel%2Bproxy.md). So please refer to that for more details. 
 
-Assume you have already read the previously mentioned part, and successfully created your root CA `cacert.pem`. Now generate server-side key and cert:
+Assume you have already read the previously mentioned part, and successfully created your root CA `cacert.crt`. Now generate server-side key and cert:
 
     openssl req -config ./openssl.cnf -new -keyout server.key \
         -out server_req.pem -days 3650 -nodes
@@ -79,16 +79,16 @@ Assume you have already read the previously mentioned part, and successfully cre
 
 and client-side key and cert:
 
-    openssl req -config ./openssl.cnf -new -keyout shrpx_client_key.pem \
+    openssl req -config ./openssl.cnf -new -keyout shrpx_client.key \
         -out shrpx_client_req.pem -days 3650 -nodes
     openssl ca -config ./openssl.cnf -policy policy_anything \
         -out shrpx_client_signed.pem -infiles shrpx_client_req.pem
-    openssl x509 -in shrpx_client_signed.pem -out shrpx_client_cert.pem
+    openssl x509 -in shrpx_client_signed.pem -out shrpx_client.crt
 
 Concatenate certs:
 
-    cat shrpx_client_key.pem shrpx_client_cert.pem > shrpx_client.pem
-    cat cacert.pem shrpx_client_cert.pem > trusted_certs.pem
+    cat shrpx_client.key shrpx_client.crt > shrpx_client.pem
+    cat cacert.crt shrpx_client.crt > trusted_certs.crt
 
 And because Windows doesn't accept PEM encoded private key, for Windows use you have to convert the client cert to `.pfx` format:
 
@@ -103,7 +103,7 @@ Copy all certs to `/etc/shrpx`:
 
     mkdir /etc/shrpx
     mkdir /etc/shrpx/certs
-    cp server.crt server.key trusted_certs.pem /etc/shrpx/certs
+    cp server.crt server.key trusted_certs.crt /etc/shrpx/certs
 
 Create `shrpx.conf` under `/etc/shrpx` as following:
 
@@ -115,7 +115,7 @@ Create `shrpx.conf` under `/etc/shrpx` as following:
     private-key-file=/etc/shrpx/certs/server.key
     certificate-file=/etc/shrpx/certs/server.crt
     verify-client=yes
-    verify-client-cacert=/etc/shrpx/certs/trusted_certs.pem
+    verify-client-cacert=/etc/shrpx/certs/trusted_certs.crt
     #enable spdy proxy mode
     spdy-proxy=yes
     daemon=yes
@@ -281,7 +281,7 @@ Since the SPDY proxy you are going to connect requests client certificate verifi
 
 And so far the mere browsers that supports SPDY proxy is Chrome/Chromium. The SPDY proxy will only serve as an HTTPS proxy if it is used in other browsers.
 
-__a. Import Client Certificate on Windows__
+__a. Import Client and CA Certificate on Windows__
 
 Since Windows doesn't accept PEM encoded private key, choose the `.pfx` one. It is recommended that you use `certmgr.msc` to import the certificate.
 
@@ -298,6 +298,9 @@ STEPS:
 5) [optional] Click "Refresh" button on the certmgr window.
 
 The certificate will be in "Personal\Certificates" folder if it is correctly imported.
+
+And double click `cacert.crt` to install the CA cert to "Trusted Root Certification Authorities".
+
 
 __b. Import PAC file to Chrome__
 
