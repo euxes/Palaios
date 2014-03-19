@@ -61,6 +61,7 @@ Run `locate libspdylay.so` or `find /usr/local -name libspdylay`, you will *prob
 So these library files (actually only one library file, other two are symbolic links) were being copied to a directoy `shrpx` cannot find. Simply making a symbolic link will solve the problem:
 
     ln -s /usr/local/lib/libspdylay.so /lib/i386-linux-gnu/libspdylay.so.7
+    ldconfig
 
 II. OpenSSL prerequisite 
 ------------------------
@@ -77,7 +78,9 @@ Assume you have already read the previously mentioned part, and successfully cre
         -out server_signed.pem -infiles server_req.pem
     openssl x509 -in server_signed.pem -out server.crt
 
-and client-side key and cert:
+When you are prompted to input the Common Name of the cert, make it the domain name of your server. Otherwise, the browser will throw a certificate error when connecting to the proxy if it is being used.
+
+Generate client-side key and cert:
 
     openssl req -config ./openssl.cnf -new -keyout shrpx_client.key \
         -out shrpx_client_req.pem -days 3650 -nodes
