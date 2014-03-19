@@ -60,7 +60,7 @@ Run `locate libspdylay.so` or `find /usr/local -name libspdylay`, you will *prob
 
 So these library files (actually only one library file, other two are symbolic links) were being copied to a directoy `shrpx` cannot find. Simply making a symbolic link will solve the problem:
 
-    ln -s  /lib/i386-linux-gnu/libspdylay.so.7  /usr/local/lib/libspdylay.so
+    ln -s /usr/local/lib/libspdylay.so /lib/i386-linux-gnu/libspdylay.so.7
 
 II. OpenSSL prerequisite 
 ------------------------
