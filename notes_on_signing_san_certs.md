@@ -70,7 +70,8 @@ and modify `[v3_req]` section, and append `[alt_names]` section.
 
 Now, create a CSR.
 
-    openssl req -config ./foo.cnf -new -keyout foo_server_key.pem -out foo_server_req.pem -days 3650 -nodes
+    openssl req -config ./foo.cnf -new -keyout foo_server_key.pem \
+        -out foo_server_req.pem -days 3650 -nodes
 
 Verify the CSR using 
 
@@ -84,7 +85,8 @@ III. Signing the CSR
 
 Sign the CSR using
 
-    openssl ca -config ./foo.cnf -policy policy_anything -out foo_server_signed.pem -extensions v3_req -infiles foo_server_req.pem 
+    openssl ca -config ./foo.cnf -policy policy_anything -out foo_server_signed.pem \
+        -extensions v3_req -infiles foo_server_req.pem 
 
 Or you can create another `.cnf` file (say, `foo_req.cnf`) that only contains following lines, in the scenario that you are signing the CSR from others. 
 
@@ -100,7 +102,8 @@ Or you can create another `.cnf` file (say, `foo_req.cnf`) that only contains fo
 
 and use `foo_req.cnf` along with `-extfile` option. 
 
-    openssl ca -config ./openssl.cnf -policy policy_anything -out foo_server_signed.pem -extfile foo_req.cnf -extensions v3_req -infiles foo_server_req.pem  
+    openssl ca -config ./openssl.cnf -policy policy_anything -out foo_server_signed.pem \
+        -extfile foo_req.cnf -extensions v3_req -infiles foo_server_req.pem  
 
 Note that in both ways, the `-infiles` option should be the last option, as the [`openssl ca` doc][1] says:
 
