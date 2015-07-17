@@ -4,7 +4,7 @@ Notes on Signing Subject Alternative Names (SANs) Certificates
 I. Creating a Root CA
 ---------------------
 
-Skip this part if you are to issue a self-signed certificates using `openssl x509` or you have already got a root CA. Otherwise just refer to the __OpenSSL prerequisite__ part of my notes _Setting up a Stunnel-secured Proxy Server_.
+Skip this part if you are to issue self-signed certificates using `openssl x509` or you have already got a root CA. Otherwise just refer to the __OpenSSL prerequisite__ part of my notes _Setting up a Stunnel-secured Proxy Server_.
 
 To be brief, run 
 
