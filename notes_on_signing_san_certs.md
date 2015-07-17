@@ -113,7 +113,7 @@ Note that in both ways, the `-infiles` option should be the last option, as the 
 Errors such as 
 
 > ...  
-> openssl "-extensions": No such file or directory   
+> -extensions: No such file or directory   
 > ...   
 
 will occur if putting `-infiles` option in the middle.
