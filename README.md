@@ -1,4 +1,3 @@
-καλός
+Notes for configurations
 =====
-
-Notes for configurations.
+.
